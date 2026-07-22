@@ -1,0 +1,30 @@
+services:
+  # Desarrollo: hot-reload con Vite (Node 22)
+  # Uso: docker compose up dev
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      # Evita que node_modules del host sobrescriba el del contenedor
+      - /app/node_modules
+    environment:
+      - VITE_GRAPHQL_URL=${VITE_GRAPHQL_URL:-http://localhost:3000/graphql}
+    # Necesario para que el HMR de Vite funcione con volúmenes montados
+    command: npm run dev -- --host 0.0.0.0
+
+  # Producción: build estático servido por nginx
+  # Uso: docker compose up --build web
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_GRAPHQL_URL: ${VITE_GRAPHQL_URL:-http://localhost:3000/graphql}
+    ports:
+      - "8080:80"
+    profiles:
+      - prod
