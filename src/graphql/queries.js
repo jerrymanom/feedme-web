@@ -1,46 +1,78 @@
 import { gql } from '@apollo/client'
 
-export const RECIPES_AVAILABLE = gql`
-  query RecipesAvailable {
-    desayuno: recipes(mealtime: "desayuno", availableOnly: true) {
+export const SESSION = gql`
+  query Session {
+    me {
+      id
+      email
+    }
+    household {
+      id
+      name
+      demo
+      inviteCode
+      members {
+        id
+        email
+      }
+    }
+  }
+`
+
+export const MEAL_RECIPES = gql`
+  query MealRecipes($mealtime: String!) {
+    recipes(mealtime: $mealtime) {
+      id
       name
       available
-      products{
-        id
-        name
-        amount
-        category {
-            id
-            name
-            productsCount
+      ingredients {
+        quantity
+        sufficient
+        product {
+          id
+          name
+          amount
         }
       }
     }
-    comida: recipes(mealtime: "comida", availableOnly: true) {
+  }
+`
+
+export const PANTRY = gql`
+  query Pantry {
+    products {
+      id
       name
-      available
-      products{
+      amount
+      enabled
+      category {
         id
         name
-        amount
-        category {
-            id
-            name
-            productsCount
-        }
       }
     }
-    cena: recipes(mealtime: "cena", availableOnly: true) {
-      name
-      available
-      products{
+  }
+`
+
+export const PURCHASES = gql`
+  query Purchases($month: String!) {
+    spending(month: $month) {
+      totalCents
+      purchasesCount
+    }
+    purchases {
+      id
+      storeName
+      purchasedOn
+      totalCents
+      status
+      items {
         id
-        name
-        amount
-        category {
-            id
-            name
-            productsCount
+        description
+        quantity
+        totalCents
+        product {
+          id
+          name
         }
       }
     }

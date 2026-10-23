@@ -1,56 +1,62 @@
 # FeedMe Web
 
-Frontend React para la API GraphQL de FeedMe — gestiona el inventario de cocina y muestra qué recetas se pueden preparar con el stock actual.
+App web (pensada para celular) de **FeedMe**: la despensa compartida de tu casa. Muestra qué puedes cocinar con lo que hay, lleva el inventario, lee los tickets del súper con IA y suma el gasto del mes. Consume la API GraphQL de [`feedme`](https://github.com/jerrymanom/feedme).
+
+## Qué hace
+
+| Pantalla | Para qué sirve |
+|----------|----------------|
+| **Hoy** | Recetas que puedes cocinar ahora según la hora (desayuno, comida o cena) y las que casi alcanzas, con lo que falta. "Cocinar" descuenta los ingredientes de la despensa. |
+| **Despensa** | Inventario por categoría con controles − / + (con respuesta optimista). |
+| **Tickets** | Gasto del mes, escaneo de tickets y revisión línea por línea antes de sumar a la despensa. |
+| **Hogar** | Crear cuenta o iniciar sesión, código para invitar a quien vive contigo y miembros del hogar. |
+
+Sin sesión, la app muestra la **cocina de ejemplo** de la API en modo solo lectura, así cualquiera puede probarla sin registrarse.
 
 ## Stack
 
-- **React 19** + **Vite 8**
-- **Apollo Client 4** para GraphQL
-- JavaScript (JSX)
+- React 19 + Vite
+- Apollo Client 4 (token de sesión en `Authorization: Bearer`)
+- CSS propio con tokens de color (modo claro y oscuro)
+- Sin dependencias extra: enrutamiento por hash de ~20 líneas y pruebas con `node:test`
 
-## Requisitos
+## Decisiones de diseño
 
-- Node.js 18+
-- Backend FeedMe corriendo en `http://localhost:3000` (ver `API_REFERENCE.md`)
+- **Mobile first:** barra de pestañas inferior, botones de al menos 44 px y foco visible con teclado.
+- **El ticket se ve como ticket:** la revisión imita el papel térmico, con bordes rasgados, para que sea obvio qué leyó la IA.
+- **Fotos más ligeras:** la imagen se reduce a 1600 px en el teléfono antes de subirla; el envío es más rápido y cada escaneo cuesta menos.
+- **Dinero en centavos** de punta a punta; solo se formatea al mostrarlo.
 
 ## Configuración
 
-Crea un archivo `.env` en la raíz del proyecto:
+Crea `.env` en la raíz:
 
 ```
 VITE_GRAPHQL_URL=http://localhost:3000/graphql
 ```
 
-Si no se define, toma `http://localhost:3000/graphql` como default.
-
 ## Comandos
 
 ```bash
-npm install        # Instalar dependencias
-npm run dev        # Servidor de desarrollo → http://localhost:5173
-npm run build      # Build de producción
-npm run preview    # Preview del build
-npm run lint       # Lint con ESLint
+npm install
+npm run dev        # http://localhost:5173
+npm test           # pruebas unitarias (node:test)
+npm run lint
+npm run build
 ```
+
+CI (GitHub Actions) corre lint, pruebas y build en cada PR.
 
 ## Estructura
 
 ```
 src/
-├── main.jsx              # Entry point — ApolloProvider + ReactDOM
-├── App.jsx               # Componente principal, query de recetas disponibles
-├── apollo/
-│   └── client.js         # Configuración de Apollo Client
-└── graphql/
-    └── queries.js        # Definiciones de queries GraphQL
+├── main.jsx                 # Apollo + sesión + avisos
+├── App.jsx                  # Layout y rutas (#/, #/despensa, #/tickets, #/hogar)
+├── apollo/client.js         # Cliente con encabezado Authorization
+├── auth/                    # Sesión: usuario, hogar, iniciar y cerrar sesión
+├── components/              # Barra de pestañas, aviso de demo, stepper, avisos
+├── screens/                 # Una pantalla por pestaña + revisión de ticket
+├── graphql/                 # Queries y mutations
+└── lib/                     # Dinero, fechas, imagen, recetas, router (+ pruebas)
 ```
-
-## Funcionamiento
-
-La pantalla principal consulta `RecipesAvailable` — una sola query que usa aliases GraphQL para traer recetas disponibles de los tres tiempos de comida (desayuno, comida, cena) en paralelo.
-
-Una receta aparece disponible solo cuando todos sus ingredientes tienen stock (`amount > 0` y `enabled: true`). Este cálculo lo hace el servidor en tiempo real.
-
-## API
-
-Ver `API_REFERENCE.md` para el schema GraphQL completo, todos los queries disponibles y cómo levantar el backend localmente.
