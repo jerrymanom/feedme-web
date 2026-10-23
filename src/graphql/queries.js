@@ -38,6 +38,33 @@ export const MEAL_RECIPES = gql`
   }
 `
 
+export const CATEGORIES = gql`
+  query Categories {
+    categories {
+      id
+      name
+    }
+  }
+`
+
+export const RECIPES = gql`
+  query Recipes {
+    recipes {
+      id
+      name
+      mealtime
+      available
+      ingredients {
+        quantity
+        product {
+          id
+          name
+        }
+      }
+    }
+  }
+`
+
 export const PANTRY = gql`
   query Pantry {
     products {
@@ -68,6 +95,7 @@ export const PURCHASES = gql`
       items {
         id
         description
+        genericName
         quantity
         totalCents
         product {

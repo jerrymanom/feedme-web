@@ -78,6 +78,8 @@ export default function TodayScreen() {
         <h1 className="headline">¿Qué hay de {meal.label}?</h1>
       </header>
 
+      <a className="text-link" href="#/recetas">Ver y crear recetas</a>
+
       {loading && <p className="quiet">Revisando la despensa…</p>}
       {error && <p className="notice notice-error">No se pudieron cargar las recetas. Revisa tu conexión.</p>}
 

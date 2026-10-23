@@ -22,11 +22,12 @@ Pruebas: funciones puras en `src/lib/` con `node:test` (sin dependencias). Si ag
 main.jsx → ApolloProvider → SessionProvider → ToastProvider → App (useRoute) → screens/*
 ```
 
-- **Rutas por hash** (`src/lib/router.js`, `useSyncExternalStore`): `#/`, `#/despensa`, `#/tickets`, `#/tickets/:id`, `#/hogar`. No agregar un router sin necesidad.
+- **Rutas por hash** (`src/lib/router.js`, `useSyncExternalStore`): `#/`, `#/recetas`, `#/despensa`, `#/tickets`, `#/tickets/:id`, `#/hogar`. No agregar un router sin necesidad.
 - **Sesión** (`src/auth/`): el token vive en `localStorage` (`src/lib/session.js`) y `apollo/client.js` lo envía como `Authorization: Bearer`. `signIn`/`signOut` llaman `client.resetStore()`. `useSession()` da `me`, `household`, `signIn`, `signOut`.
 - **Sin sesión** la API responde con el hogar demo (solo lectura): las mutations de escritura devuelven error. La UI deshabilita esas acciones y muestra `DemoBanner`.
 - **Mutations** devuelven errores de negocio como datos (`errors: [String]`); mostrarlos con `useToast()`. Errores de red van al `catch`.
-- **Refetch** por nombre de operación: `MealRecipes`, `Pantry`, `Purchases`, `Session`.
+- **Refetch** por nombre de operación: `MealRecipes`, `Recipes`, `Pantry`, `Purchases`, `Categories`, `Session`.
+- **Formularios:** la lógica que arma inputs de mutations (`confirmItems`, `recipeIngredients`) vive en `src/lib/forms.js` con pruebas.
 - **Límite de complejidad de la API: 30.** Mantén cada query pequeña.
 - **Dinero** siempre en centavos (`formatCents`). Fechas de calendario (`AAAA-MM-DD`) con `formatIsoDate`, nunca `new Date(iso)`.
 - **Estilos:** tokens en `src/index.css` (nopal, jamaica, maíz; modo oscuro), componentes en `src/App.css`. El ticket (`.receipt`) es el único elemento decorativo; el resto se mantiene sobrio.

@@ -8,7 +8,9 @@ const TABS = [
 ]
 
 export default function TabBar({ route }) {
-  const section = '/' + route.split('/')[1]
+  // Recipes live under "Hoy", the screen they feed.
+  const segment = route.split('/')[1]
+  const section = segment === 'recetas' ? '/' : '/' + segment
   return (
     <nav className="tabbar" aria-label="Secciones">
       {TABS.map((tab) => (

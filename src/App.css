@@ -379,6 +379,133 @@
   font-weight: 700;
 }
 
+/* ── Forms shared by pantry, recipes and receipts ──────────────────── */
+.panel {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.form select {
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  font-weight: 400;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 6.5rem;
+  gap: 12px;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.link-plain {
+  color: var(--ink-soft);
+}
+
+.text-link {
+  justify-self: start;
+  font-weight: 700;
+}
+
+.choices,
+.ingredient-rows {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choices legend,
+.ingredient-rows legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-weight: 700;
+}
+
+.choices {
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+}
+
+.form .choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.choice input {
+  accent-color: var(--nopal);
+}
+
+.choice:has(input:checked) {
+  border-color: var(--nopal);
+  background: var(--nopal-soft);
+  color: var(--nopal);
+  font-weight: 700;
+}
+
+.ingredient-row {
+  display: grid;
+  grid-template-columns: 1fr 4.5rem auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.ingredient-row input {
+  min-height: 48px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.icon-button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--jamaica-soft);
+  color: var(--jamaica);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.receipt-new {
+  display: grid;
+  grid-template-columns: 1fr 9rem;
+  gap: 8px;
+  font-family: var(--text);
+}
+
+.receipt-new input,
+.receipt-new select {
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid #c9c7bd;
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--paper-ink);
+}
+
 /* ── Household ─────────────────────────────────────────────────────── */
 .form {
   display: grid;

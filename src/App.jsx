@@ -5,6 +5,7 @@ import TodayScreen from './screens/TodayScreen'
 import PantryScreen from './screens/PantryScreen'
 import ReceiptsScreen from './screens/ReceiptsScreen'
 import HouseholdScreen from './screens/HouseholdScreen'
+import RecipesScreen from './screens/RecipesScreen'
 import './App.css'
 
 function Screen({ route }) {
@@ -16,6 +17,8 @@ function Screen({ route }) {
       return <ReceiptsScreen purchaseId={id} />
     case 'hogar':
       return <HouseholdScreen />
+    case 'recetas':
+      return <RecipesScreen />
     default:
       return <TodayScreen />
   }

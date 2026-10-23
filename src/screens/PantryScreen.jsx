@@ -4,6 +4,7 @@ import { UPDATE_STOCK } from '../graphql/mutations'
 import { useSession } from '../auth/context'
 import { useToast } from '../components/toast-context'
 import Stepper from '../components/Stepper'
+import NewProductForm from '../components/NewProductForm'
 
 function groupByCategory(products = []) {
   const groups = new Map()
@@ -50,10 +51,11 @@ export default function PantryScreen() {
         <p className="lede">Lo que hay en casa. Las recetas se calculan con estas cantidades.</p>
       </header>
 
+      {me && <NewProductForm />}
       {loading && <p className="quiet">Cargando la despensa…</p>}
       {error && <p className="notice notice-error">No se pudo cargar la despensa. Revisa tu conexión.</p>}
       {data && groups.length === 0 && (
-        <p className="quiet">Tu despensa está vacía. Escanea un ticket para llenarla.</p>
+        <p className="quiet">Tu despensa está vacía. Agrega productos o escanea un ticket para llenarla.</p>
       )}
 
       {groups.map(([category, products]) => (

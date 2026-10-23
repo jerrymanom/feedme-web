@@ -6,9 +6,9 @@ App web (pensada para celular) de **FeedMe**: la despensa compartida de tu casa.
 
 | Pantalla | Para qué sirve |
 |----------|----------------|
-| **Hoy** | Recetas que puedes cocinar ahora según la hora (desayuno, comida o cena) y las que casi alcanzas, con lo que falta. "Cocinar" descuenta los ingredientes de la despensa. |
-| **Despensa** | Inventario por categoría con controles − / + (con respuesta optimista). |
-| **Tickets** | Gasto del mes, escaneo de tickets y revisión línea por línea antes de sumar a la despensa. |
+| **Hoy** | Recetas que puedes cocinar ahora según la hora (desayuno, comida o cena) y las que casi alcanzas, con lo que falta. "Cocinar" descuenta los ingredientes de la despensa. Desde aquí se crean recetas. |
+| **Despensa** | Inventario por categoría con controles − / + (con respuesta optimista) y alta de productos nuevos. |
+| **Tickets** | Gasto del mes, escaneo de tickets y revisión línea por línea antes de sumar a la despensa; una línea puede crear un producto nuevo. |
 | **Hogar** | Crear cuenta o iniciar sesión, código para invitar a quien vive contigo y miembros del hogar. |
 
 Sin sesión, la app muestra la **cocina de ejemplo** de la API en modo solo lectura, así cualquiera puede probarla sin registrarse.
@@ -52,7 +52,7 @@ CI (GitHub Actions) corre lint, pruebas y build en cada PR.
 ```
 src/
 ├── main.jsx                 # Apollo + sesión + avisos
-├── App.jsx                  # Layout y rutas (#/, #/despensa, #/tickets, #/hogar)
+├── App.jsx                  # Layout y rutas (#/, #/recetas, #/despensa, #/tickets, #/hogar)
 ├── apollo/client.js         # Cliente con encabezado Authorization
 ├── auth/                    # Sesión: usuario, hogar, iniciar y cerrar sesión
 ├── components/              # Barra de pestañas, aviso de demo, stepper, avisos
