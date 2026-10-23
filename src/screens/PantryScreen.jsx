@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client/react'
 import { PANTRY } from '../graphql/queries'
 import { UPDATE_STOCK } from '../graphql/mutations'
@@ -5,6 +6,7 @@ import { useSession } from '../auth/context'
 import { useToast } from '../components/toast-context'
 import Stepper from '../components/Stepper'
 import NewProductForm from '../components/NewProductForm'
+import ProductEditor from '../components/ProductEditor'
 
 function groupByCategory(products = []) {
   const groups = new Map()
@@ -20,6 +22,7 @@ export default function PantryScreen() {
   const { me } = useSession()
   const toast = useToast()
   const { data, loading, error } = useQuery(PANTRY)
+  const [editingId, setEditingId] = useState(null)
   const [updateStock] = useMutation(UPDATE_STOCK, { refetchQueries: ['MealRecipes'] })
 
   async function changeAmount(product, amount) {
@@ -48,7 +51,7 @@ export default function PantryScreen() {
     <section className="screen">
       <header className="screen-header">
         <h1 className="headline">Despensa</h1>
-        <p className="lede">Lo que hay en casa. Las recetas se calculan con estas cantidades.</p>
+        <p className="lede">Lo que hay en casa. Toca un producto para corregirlo o quitarlo.</p>
       </header>
 
       {me && <NewProductForm />}
@@ -63,10 +66,20 @@ export default function PantryScreen() {
           <h2 className="section-title">{category}</h2>
           <ul className="stock-list">
             {products.map((product) => (
-              <li key={product.id} className={product.amount === 0 ? 'stock-row empty' : 'stock-row'}>
-                <span className="stock-name">{product.name}</span>
-                <Stepper value={product.amount} label={product.name} disabled={!me}
-                  onChange={(amount) => changeAmount(product, amount)} />
+              <li key={product.id} className="stock-item">
+                <div className={product.amount === 0 ? 'stock-row empty' : 'stock-row'}>
+                  {me ? (
+                    <button type="button" className="stock-name stock-edit" aria-expanded={editingId === product.id}
+                      onClick={() => setEditingId(editingId === product.id ? null : product.id)}>
+                      {product.name}
+                    </button>
+                  ) : (
+                    <span className="stock-name">{product.name}</span>
+                  )}
+                  <Stepper value={product.amount} label={product.name} disabled={!me}
+                    onChange={(amount) => changeAmount(product, amount)} />
+                </div>
+                {editingId === product.id && <ProductEditor product={product} onClose={() => setEditingId(null)} />}
               </li>
             ))}
           </ul>
