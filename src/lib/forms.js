@@ -27,3 +27,9 @@ export function confirmItems(lines) {
 export function readyToConfirm(lines) {
   return lines.every((line) => line.productId !== 'new' || (line.newName.trim() && line.newCategoryId))
 }
+
+// Form rows for an existing recipe, so editing starts from what is saved.
+export function rowsFromRecipe(recipe) {
+  if (!recipe) return [{ productId: '', quantity: 1 }]
+  return recipe.ingredients.map(({ product, quantity }) => ({ productId: product.id, quantity }))
+}

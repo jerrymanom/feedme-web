@@ -197,6 +197,17 @@
   font-weight: 700;
 }
 
+.recipe-editing {
+  display: grid;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.recipe-editing > .link-button {
+  justify-self: start;
+}
+
 .recipe-almost h3 {
   color: var(--ink-soft);
 }

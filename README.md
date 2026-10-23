@@ -6,7 +6,7 @@ App web (pensada para celular) de **FeedMe**: la despensa compartida de tu casa.
 
 | Pantalla | Para qué sirve |
 |----------|----------------|
-| **Hoy** | Recetas que puedes cocinar ahora según la hora (desayuno, comida o cena) y las que casi alcanzas, con lo que falta. "Cocinar" descuenta los ingredientes de la despensa. Desde aquí se crean recetas. |
+| **Hoy** | Recetas que puedes cocinar ahora según la hora (desayuno, comida o cena) y las que casi alcanzas, con lo que falta. "Cocinar" descuenta los ingredientes de la despensa. Desde aquí se crean, editan y eliminan recetas. |
 | **Despensa** | Inventario por categoría con controles − / + (con respuesta optimista), alta de productos nuevos y edición: tocar un producto permite cambiarle nombre o categoría, o quitarlo. |
 | **Tickets** | Gasto del mes, escaneo de tickets y revisión línea por línea antes de sumar a la despensa; una línea puede crear un producto nuevo. |
 | **Hogar** | Crear cuenta o iniciar sesión, código para invitar a quien vive contigo y miembros del hogar. |

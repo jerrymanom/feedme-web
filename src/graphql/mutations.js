@@ -125,3 +125,24 @@ export const DELETE_PRODUCT = gql`
     }
   }
 `
+
+export const UPDATE_RECIPE = gql`
+  mutation UpdateRecipe($recipeId: ID!, $name: String!, $mealtime: [String!]!, $ingredients: [IngredientInput!]!) {
+    updateRecipe(input: { recipeId: $recipeId, name: $name, mealtime: $mealtime, ingredients: $ingredients }) {
+      errors
+      recipe {
+        id
+        name
+      }
+    }
+  }
+`
+
+export const DELETE_RECIPE = gql`
+  mutation DeleteRecipe($recipeId: ID!) {
+    deleteRecipe(input: { recipeId: $recipeId }) {
+      errors
+      deletedRecipeId
+    }
+  }
+`
