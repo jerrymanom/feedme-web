@@ -100,3 +100,28 @@ export const CREATE_RECIPE = gql`
     }
   }
 `
+
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($productId: ID!, $name: String, $categoryId: ID) {
+    updateProduct(input: { productId: $productId, name: $name, categoryId: $categoryId }) {
+      errors
+      product {
+        id
+        name
+        category {
+          id
+          name
+        }
+      }
+    }
+  }
+`
+
+export const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($productId: ID!) {
+    deleteProduct(input: { productId: $productId }) {
+      errors
+      deletedProductId
+    }
+  }
+`

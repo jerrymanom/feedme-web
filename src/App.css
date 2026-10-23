@@ -256,6 +256,45 @@
   font-variant-numeric: tabular-nums;
 }
 
+.stock-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.stock-item .stock-row {
+  border-bottom: 0;
+}
+
+.stock-edit {
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  text-decoration: underline dotted var(--ink-soft);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.editor {
+  margin-bottom: 12px;
+}
+
+.push-right {
+  margin-left: auto;
+}
+
+.button-danger {
+  background: var(--jamaica);
+  color: #ffffff;
+}
+
+.danger-confirm {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--jamaica-soft);
+}
+
 /* ── Tickets ───────────────────────────────────────────────────────── */
 .spend {
   font: 800 clamp(44px, 13vw, 64px) / 1 var(--display);
