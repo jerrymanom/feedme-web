@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { capitalize, confirmItems, readyToConfirm, recipeIngredients } from './forms.js'
+import { capitalize, confirmItems, readyToConfirm, recipeIngredients, rowsFromRecipe } from './forms.js'
 
 test('capitalizes names read from receipts', () => {
   assert.equal(capitalize('  detergente roma '), 'Detergente roma')
@@ -36,4 +36,10 @@ test('sends newProduct for lines that create a product', () => {
 test('blocks confirming until new products have a name and category', () => {
   assert.equal(readyToConfirm([{ productId: 'new', newName: 'Pan', newCategoryId: '' }]), false)
   assert.equal(readyToConfirm([{ productId: 'new', newName: 'Pan', newCategoryId: '2' }, { productId: '' }]), true)
+})
+
+test('starts the recipe form from the saved ingredients', () => {
+  const recipe = { ingredients: [{ quantity: 2, product: { id: '7', name: 'Leche' } }] }
+  assert.deepEqual(rowsFromRecipe(recipe), [{ productId: '7', quantity: 2 }])
+  assert.deepEqual(rowsFromRecipe(null), [{ productId: '', quantity: 1 }])
 })
