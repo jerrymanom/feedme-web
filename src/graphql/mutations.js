@@ -76,3 +76,27 @@ export const CONFIRM_PURCHASE = gql`
     }
   }
 `
+
+export const CREATE_PRODUCT = gql`
+  mutation CreateProduct($name: String!, $categoryId: ID!, $amount: Int) {
+    createProduct(input: { name: $name, categoryId: $categoryId, amount: $amount }) {
+      errors
+      product {
+        id
+        name
+      }
+    }
+  }
+`
+
+export const CREATE_RECIPE = gql`
+  mutation CreateRecipe($name: String!, $mealtime: [String!]!, $ingredients: [IngredientInput!]!) {
+    createRecipe(input: { name: $name, mealtime: $mealtime, ingredients: $ingredients }) {
+      errors
+      recipe {
+        id
+        name
+      }
+    }
+  }
+`

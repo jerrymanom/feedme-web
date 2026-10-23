@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client/react'
-import { PANTRY } from '../graphql/queries'
+import { CATEGORIES, PANTRY } from '../graphql/queries'
 import { CONFIRM_PURCHASE } from '../graphql/mutations'
 import { useToast } from '../components/toast-context'
 import Stepper from '../components/Stepper'
 import { formatCents } from '../lib/money'
 import { formatIsoDate } from '../lib/dates'
 import { navigate } from '../lib/router'
+import { capitalize, confirmItems, readyToConfirm } from '../lib/forms'
 
 // The receipt as the AI read it, printed like the paper it came from. Each line
 // can be pointed at a pantry product (or left out) before anything is restocked.
@@ -14,12 +15,18 @@ export default function ReceiptReview({ purchase }) {
   const toast = useToast()
   const pending = purchase.status === 'PENDING_REVIEW'
   const { data: pantry } = useQuery(PANTRY)
+  const { data: catalog } = useQuery(CATEGORIES, { skip: !pending })
   const [confirmPurchase, { loading }] = useMutation(CONFIRM_PURCHASE, {
     refetchQueries: ['Purchases', 'Pantry', 'MealRecipes'],
     awaitRefetchQueries: true,
   })
   const [lines, setLines] = useState(() =>
-    purchase.items.map((item) => ({ ...item, productId: item.product?.id ?? '' })),
+    purchase.items.map((item) => ({
+      ...item,
+      productId: item.product?.id ?? '',
+      newName: capitalize(item.genericName ?? ''),
+      newCategoryId: '',
+    })),
   )
   const matched = lines.filter((line) => line.productId).length
 
@@ -28,7 +35,7 @@ export default function ReceiptReview({ purchase }) {
   }
 
   async function handleConfirm() {
-    const items = lines.map((line) => ({ id: line.id, productId: line.productId || null, quantity: line.quantity }))
+    const items = confirmItems(lines)
     try {
       const { data } = await confirmPurchase({ variables: { purchaseId: purchase.id, items } })
       const [problem] = data.confirmPurchase.errors
@@ -64,6 +71,7 @@ export default function ReceiptReview({ purchase }) {
                   <select value={line.productId} aria-label={`Producto para ${line.description}`}
                     onChange={(event) => updateLine(line.id, { productId: event.target.value })}>
                     <option value="">No sumar a la despensa</option>
+                    <option value="new">Crear producto nuevo…</option>
                     {pantry?.products.map((product) => (
                       <option key={product.id} value={product.id}>{product.name}</option>
                     ))}
@@ -71,7 +79,22 @@ export default function ReceiptReview({ purchase }) {
                   <Stepper value={line.quantity} min={1} label={line.description}
                     disabled={!line.productId} onChange={(quantity) => updateLine(line.id, { quantity })} />
                 </div>
-              ) : (
+              ) : null}
+              {pending && line.productId === 'new' && (
+                <div className="receipt-new">
+                  <input value={line.newName} aria-label={`Nombre del producto nuevo para ${line.description}`}
+                    placeholder="Nombre del producto"
+                    onChange={(event) => updateLine(line.id, { newName: event.target.value })} />
+                  <select value={line.newCategoryId} aria-label={`Categoría para ${line.description}`}
+                    onChange={(event) => updateLine(line.id, { newCategoryId: event.target.value })}>
+                    <option value="" disabled>Categoría</option>
+                    {catalog?.categories.map((category) => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              {!pending && (
                 line.product && <p className="receipt-note">+{line.quantity} {line.product.name}</p>
               )}
             </li>
@@ -85,7 +108,8 @@ export default function ReceiptReview({ purchase }) {
       </article>
 
       {pending && (
-        <button type="button" className="button button-wide" onClick={handleConfirm} disabled={loading}>
+        <button type="button" className="button button-wide" onClick={handleConfirm}
+          disabled={loading || !readyToConfirm(lines)}>
           {loading ? 'Guardando…' : `Sumar ${matched} ${matched === 1 ? 'artículo' : 'artículos'} a la despensa`}
         </button>
       )}
